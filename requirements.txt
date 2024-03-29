@@ -1,4 +1,7 @@
+numpy
 torch
 torchvision
 transformers
 timm
+matplotlib
+ipykernel
