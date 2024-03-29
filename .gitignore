@@ -1,4 +1,10 @@
+# MacOS
 .DS_Store
+
+# Emacs
 *~
 \#*\#
 .\#*
+
+# Python Environment
+venv/
