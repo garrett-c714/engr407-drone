@@ -37,22 +37,26 @@ def get_detections():
     # Perform inference
     with torch.no_grad():
         outputs = model(image_tensor)
+        
+        pred_boxes = outputs['pred_boxes'][0]
+        pred_logits = outputs['logits'][0]
 
-    # Remove batch dimension
-    pred_boxes = outputs['pred_boxes']
-    #print(outputs.keys())
-    pred_logits = outputs['logits']
+        confidence_threshold = 0.5
+        high_confidence_indices = (pred_logits.softmax(dim=-1).max(dim=-1).values > confidence_threshold)
 
-    print(outputs.keys())
+        pred_boxes = pred_boxes[high_confidence_indices]
+        pred_logits = pred_logits[high_confidence_indices]
+
+    print(pred_boxes)
     print(pred_logits)
-    print(pred_logits.shape)
 
-    #print(pred_boxes)
-    #print(pred_logits)
+    print(len(pred_boxes))
+    print(len(pred_logits))
 
 
     # Highest scoring class within each bounding box
     predicted_classes = torch.argmax(pred_logits, dim=1)
+    print(len(predicted_classes))
 
     # Confidence scores for each box
     confidence_scores, _ = pred_logits.softmax(dim=2).max(dim=2)
