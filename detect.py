@@ -47,20 +47,23 @@ def get_detections():
         pred_boxes = pred_boxes[high_confidence_indices]
         pred_logits = pred_logits[high_confidence_indices]
 
+    '''
     print(pred_boxes)
     print(pred_logits)
 
     print(len(pred_boxes))
     print(len(pred_logits))
-
+    '''
 
     # Highest scoring class within each bounding box
     predicted_classes = torch.argmax(pred_logits, dim=1)
     print(len(predicted_classes))
+    print(type(predicted_classes[30]))
 
     # Confidence scores for each box
-    confidence_scores, _ = pred_logits.softmax(dim=2).max(dim=2)
-    confidence_scores = confidence_scores.cpu().numpy()
+    #confidence_scores = pred_logits.max(dim=1)[0].cpu().numpy()
+    confidence_scores = pred_logits.max(dim=1)[0].cpu().numpy()
+    confidence_scores = confidence_scores
 
     # Confidence -> Probability
     confidence_probs = 1 / (1 + np.exp(-confidence_scores))
@@ -71,19 +74,23 @@ def get_detections():
     print(confidence_scores[0])
     '''
 
+    '''
     print(len(predicted_classes[0]))
     print(len(pred_boxes[0]))
     print(len(confidence_probs[0]))
-
+    '''
 
     detections = []
     # Only take detections that are a high enough confidence
-    predicted_classes = predicted_classes[0]
-    pred_boxes = pred_boxes[0]
-    confidence_probs = confidence_probs[0]
 
-    for i in range(min(len(predicted_classes), len(pred_boxes), len(confidence_probs))):
-        pass
+    for i in range(len(pred_boxes)):
+        xmin, ymin, xmax, ymax = pred_boxes[i]
+
+        detections.append({
+            "box": (float(xmin), float(ymin), float(xmax), float(ymax)),
+            "class_index": predicted_classes[i].item(),
+            "confidence": confidence_probs[i].item()
+        })
 
     '''
     confidence_threshold = 0.5
