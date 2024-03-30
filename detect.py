@@ -22,6 +22,9 @@ def get_detections():
 
     # Load Model
     model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50")
+    config = model.config
+    class_labels = config.id2label
+    class_labels[91]="unknown"
 
     model.eval()
 
@@ -55,13 +58,13 @@ def get_detections():
     detections = []
     for i in range(len(pred_boxes)):
         xmin, ymin, xmax, ymax = pred_boxes[i]
-
+        class_index = predicted_classes[i].item()
         detections.append({
             "box": (float(xmin), float(ymin), float(xmax), float(ymax)),
-            "class_index": predicted_classes[i].item(),
+            "class_index": class_index,
+            "class": class_labels[class_index],
             "confidence": confidence_probs[i].item()
         })
-
 
     return {"image": image_path, "detections": detections}
 
@@ -70,6 +73,9 @@ def get_detections():
 def main():
     out = get_detections()
     print(out['detections'])
+    for d in out['detections']:
+        if d["class"] != "unknown":
+            print(d)
 
 
 if __name__ == "__main__":
