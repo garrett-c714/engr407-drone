@@ -22,11 +22,6 @@ def get_detections():
 
     # Load Model
     model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50")
-    #checkpoint = torch.hub.load_state_dict_from_url("https://dl.fbaipublicfiles.com/detr/detr_demo-da2a99e9.pth")
-    #print(checkpoint)
-    #model.load_state_dict(checkpoint["model"])
-
-    #exit()
 
     model.eval()
 
@@ -41,48 +36,23 @@ def get_detections():
         pred_boxes = outputs['pred_boxes'][0]
         pred_logits = outputs['logits'][0]
 
+        # Only take detections that are a high enough confidence
         confidence_threshold = 0.5
         high_confidence_indices = (pred_logits.softmax(dim=-1).max(dim=-1).values > confidence_threshold)
 
         pred_boxes = pred_boxes[high_confidence_indices]
         pred_logits = pred_logits[high_confidence_indices]
 
-    '''
-    print(pred_boxes)
-    print(pred_logits)
-
-    print(len(pred_boxes))
-    print(len(pred_logits))
-    '''
-
     # Highest scoring class within each bounding box
     predicted_classes = torch.argmax(pred_logits, dim=1)
-    print(len(predicted_classes))
-    print(type(predicted_classes[30]))
 
     # Confidence scores for each box
-    #confidence_scores = pred_logits.max(dim=1)[0].cpu().numpy()
     confidence_scores = pred_logits.max(dim=1)[0].cpu().numpy()
-    confidence_scores = confidence_scores
 
     # Confidence -> Probability
     confidence_probs = 1 / (1 + np.exp(-confidence_scores))
 
-    '''
-    print(pred_boxes[0])
-    print(predicted_classes[0])
-    print(confidence_scores[0])
-    '''
-
-    '''
-    print(len(predicted_classes[0]))
-    print(len(pred_boxes[0]))
-    print(len(confidence_probs[0]))
-    '''
-
     detections = []
-    # Only take detections that are a high enough confidence
-
     for i in range(len(pred_boxes)):
         xmin, ymin, xmax, ymax = pred_boxes[i]
 
@@ -92,23 +62,7 @@ def get_detections():
             "confidence": confidence_probs[i].item()
         })
 
-    '''
-    confidence_threshold = 0.5
-    detections = []
-    for box, scores, classes in zip(pred_boxes[0], confidence_probs, predicted_classes):
-        for score, class_index in zip(scores, classes):
-            if score > confidence_threshold:
-                xmin, ymin, xmax, ymax = box
 
-                detections.append({
-                    "box": (float(xmin), float(ymin), float(xmax), float(ymax)),
-                    "class_index": class_index.item(),
-                    "confidence": score.item()                                   
-                })
-    '''
-
-
-    # return {"image": image_path, "boxes": pred_boxes, "logits": pred_logits}
     return {"image": image_path, "detections": detections}
 
 
