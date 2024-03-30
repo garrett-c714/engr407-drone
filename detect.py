@@ -29,7 +29,7 @@ def get_detections():
     model.eval()
 
     # Transformation for input images
-    image_path = "object-tests/test-desk.jpeg"
+    image_path = "object-tests/test-beach.jpeg"
     image_tensor = get_normalized_image(image_path)
 
     # Perform inference
