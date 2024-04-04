@@ -1,0 +1,9 @@
+**
+GUI Module
+**
+
+We should have some kind of User Interface for our software. This is what the drone operator would be watching
+while flying the drone.
+
+Look into GUI libraries available for Python, and build out a frame with a space for our video feed, and a
+couple of buttons.

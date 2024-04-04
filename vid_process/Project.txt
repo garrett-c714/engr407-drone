@@ -1,0 +1,10 @@
+**
+Video Processing Module
+**
+
+For the machine learning efforts, I need a subroutine to call that can perform some operations on a video for me.
+
+The function signature should be: `video_frames(video_file_location: str, output_directory: str)`
+
+
+The functionality we need is that I pass it a video file and an output directory, it dumps each frame frmo the video (or realistically every x frame) as an image into the output directory. 
