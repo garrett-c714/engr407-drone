@@ -1,4 +1,4 @@
-import matplotlib as plt 
+import matplotlib.pyplot as plt 
 import matplotlib.patches as patches
 
 from detect import get_detections
@@ -18,14 +18,18 @@ def markup_image(processing_output):
         box = d["box"]
         xmin = int(box[0] * image_width)
         ymin = int(box[1] * image_height)
-        xmax = xmin + 20
-        ymax = ymin + 20
+        xmin+=20
+        ymin+=20
+        xmax = xmin - 50
+        ymax = ymin - 50
 
         rect = patches.Rectangle((xmin, ymin), xmax-xmin, ymax-ymin, linewidth=1, edgecolor="r", facecolor="none")
 
+        '''
         if d["class"] == "person":
             ax.add_patch(rect)
-
+        '''
+        ax.add_patch(rect)
 
     return plt
 
@@ -35,7 +39,7 @@ def save_image(plt, output_name):
 
 
 
-def get_markup_image(image_path):
-    processed_output = get_detections()
+def get_markup_figure(image_path):
+    processed_output = get_detections(image_path)
     plt = markup_image(processed_output)
     return plt
