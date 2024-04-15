@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt 
 import matplotlib.patches as patches
 
@@ -34,8 +36,8 @@ def markup_image(processing_output):
     return plt
 
 
-def save_image(plt, output_name):
-    plt.savefig(f"out/{output_name}.png")
+def save_image(plt, output_path, output_name):
+    plt.savefig(os.path.joinpath(output_path, f"{output_name}.png"))
 
 
 

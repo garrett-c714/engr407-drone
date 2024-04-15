@@ -3,9 +3,9 @@ import cv2
 
 from PIL import Image
 
-path = "./object-tests"
+# path = "./object-tests"
 
-def resize_images():
+def resize_images(path):
     mean_width = 0
     mean_height = 0
 
@@ -40,11 +40,13 @@ def resize_images():
 
 
 
-def generate_video():
+def generate_video(image_folder, video_folder, video_name):
     # FIXME: passed-in arguments
+    '''
     image_folder = path
     video_folder = "./videos"
     video_name = "test_video.avi"
+    '''
 
     images = [img for img in os.listdir(image_folder)
               if img.endswith("_r.jpg") or 
@@ -74,8 +76,8 @@ def split_video(video, output_folder):
     vidcap = cv2.VideoCapture(video)
     success, image = vidcap.read()
 
-    print("Got here")
-    print(success)
+    # print("Got here")
+    # print(success)
 
     i = 0
     while success:
@@ -86,9 +88,9 @@ def split_video(video, output_folder):
     return i
 
 
-def stitch_video():
-    resize_images()
-    generate_video()
+def stitch_video(image_folder, video_folder, video_name):
+    resize_images(image_folder)
+    generate_video(image_folder, video_folder, video_name)
 
     
 
