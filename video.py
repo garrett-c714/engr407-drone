@@ -40,7 +40,7 @@ def resize_images(path):
 
 
 
-def generate_video(image_folder, video_folder, video_name):
+def generate_video(image_folder, video_folder, video_name, fps):
     # FIXME: passed-in arguments
     '''
     image_folder = path
@@ -59,7 +59,7 @@ def generate_video(image_folder, video_folder, video_name):
 
     height, width, layers = frame.shape
 
-    video = cv2.VideoWriter(f"{video_folder}/" + video_name, 0, 24, (width, height))
+    video = cv2.VideoWriter(f"{video_folder}/" + video_name, 0, fps, (width, height))
 
     for image in images:
         video.write(cv2.imread(os.path.join(image_folder, image)))
@@ -76,6 +76,8 @@ def split_video(video, output_folder):
     vidcap = cv2.VideoCapture(video)
     success, image = vidcap.read()
 
+    fps = vidcap.get(cv2.CAP_PROP_FPS)
+
     # print("Got here")
     # print(success)
 
@@ -85,12 +87,12 @@ def split_video(video, output_folder):
         success, image = vidcap.read()
         i += 1
 
-    return i
+    return i, fps
 
 
-def stitch_video(image_folder, video_folder, video_name):
+def stitch_video(image_folder, video_folder, video_name, fps):
     resize_images(image_folder)
-    generate_video(image_folder, video_folder, video_name)
+    generate_video(image_folder, video_folder, video_name, fps)
 
     
 

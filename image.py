@@ -27,17 +27,18 @@ def markup_image(processing_output):
 
         rect = patches.Rectangle((xmin, ymin), xmax-xmin, ymax-ymin, linewidth=1, edgecolor="r", facecolor="none")
 
-        '''
+    
         if d["class"] == "person":
             ax.add_patch(rect)
-        '''
-        ax.add_patch(rect)
+        
+        # ax.add_patch(rect)
 
     return plt
 
 
 def save_image(plt, output_path, output_name):
-    plt.savefig(os.path.joinpath(output_path, f"{output_name}.png"))
+    plt.savefig(os.path.join(output_path, f"{output_name}.png"))
+    plt.close()
 
 
 
