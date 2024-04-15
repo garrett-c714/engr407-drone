@@ -39,6 +39,9 @@ def resize_images(path):
             resized_image.save(os.path.join(path, f"{f_split[0]}_r.jpeg"), 'JPEG', quality=95)
 
 
+def get_file_number(f):
+    return int(f.split("_")[0])
+
 
 def generate_video(image_folder, video_folder, video_name, fps):
     # FIXME: passed-in arguments
@@ -53,7 +56,9 @@ def generate_video(image_folder, video_folder, video_name, fps):
               img.endswith("_r.jpeg") or 
               img.endswith("_r.png")] 
     
-    # print(images)
+    images = sorted(images, key=get_file_number)
+    
+    #print(images)
 
     frame = cv2.imread(os.path.join(image_folder, images[0]))
 
@@ -61,6 +66,7 @@ def generate_video(image_folder, video_folder, video_name, fps):
 
     video = cv2.VideoWriter(f"{video_folder}/" + video_name, 0, fps, (width, height))
 
+    #for image in images:
     for image in images:
         video.write(cv2.imread(os.path.join(image_folder, image)))
 
@@ -96,8 +102,4 @@ def stitch_video(image_folder, video_folder, video_name, fps):
 
     
 
-if __name__ == "__main__":
-    # stitch_video()
-    i = split_video("./videos/beach_quiet_shore.mp4", "./test-split-output")
-    print(i)
     

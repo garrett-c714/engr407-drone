@@ -10,8 +10,11 @@ OUTPUT_PATH = "./out/test-full-processed"
 OUTPUT_VIDEO_NAME = "test-full.avi"
 
 def main():
-    files = glob.glob(f"{SPLIT_IMAGES_LOC}/*")
-    for f in files:
+    input_files = glob.glob(f"{SPLIT_IMAGES_LOC}/*")
+    processed_files = glob.glob(f"{OUTPUT_PATH}/*")
+    for f in input_files:
+        os.remove(f)
+    for f in processed_files:
         os.remove(f)
     frames_read, fps = split_video(INPUT_VIDEO_PATH, SPLIT_IMAGES_LOC)
     i = 0
