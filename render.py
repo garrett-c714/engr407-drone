@@ -17,14 +17,12 @@ def main():
     for f in processed_files:
         os.remove(f)
     frames_read, fps = split_video(INPUT_VIDEO_PATH, SPLIT_IMAGES_LOC)
-    i = 0
     for image in os.listdir(SPLIT_IMAGES_LOC):
         if image == ".DS_Store":
             continue
 
         plt = get_markup_figure(os.path.join(SPLIT_IMAGES_LOC, image))
-        save_image(plt, OUTPUT_PATH, i)
-        i += 1
+        save_image(plt, OUTPUT_PATH, image.split(".")[0])
     stitch_video(OUTPUT_PATH, OUTPUT_PATH, OUTPUT_VIDEO_NAME, fps)
 
 
