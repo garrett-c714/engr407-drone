@@ -69,6 +69,23 @@ def generate_video():
         os.remove(os.path.join(image_folder, image))
 
 
+
+def split_video(video, output_folder):
+    vidcap = cv2.VideoCapture(video)
+    success, image = vidcap.read()
+
+    print("Got here")
+    print(success)
+
+    i = 0
+    while success:
+        cv2.imwrite(os.path.join(output_folder, f"{i}.jpg"), image)
+        success, image = vidcap.read()
+        i += 1
+
+    return i
+
+
 def stitch_video():
     resize_images()
     generate_video()
@@ -76,5 +93,7 @@ def stitch_video():
     
 
 if __name__ == "__main__":
-    stitch_video()
+    # stitch_video()
+    i = split_video("./videos/beach_quiet_shore.mp4", "./test-split-output")
+    print(i)
     

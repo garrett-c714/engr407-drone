@@ -12,3 +12,6 @@ venv/
 
 # Data
 videos/
+
+# Output
+out/
